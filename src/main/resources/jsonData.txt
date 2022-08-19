@@ -1,0 +1,1 @@
+{"eventId":"AQA60","providerId":"TOUCH","routeId":"%s","sourceId":"${__Random(100000,10000000)}","sessionId":"2121212121212","content":{"event":{"eventType":"TEXT","text":"connect to Support"}},"externalReferenceId":"RefId13"}
