@@ -1,4 +1,5 @@
-import com.microsoft.playwright.*;
+import pages.AgentDeskPage;
+import pages.LoggedoutPage;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -78,7 +79,5 @@ public class PagePerformanceTest extends BaseWebTest {
 
         assertions.assertAll();
     }
-
-
 
 }

@@ -1,4 +1,6 @@
 import com.microsoft.playwright.*;
+import pages.AgentDeskPage;
+import pages.LoginPage;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -10,7 +12,7 @@ public class ChatsPerformanceTest extends BaseWebTest {
 
     @Title("Assert that time of chat transferring is less than 20 seconds")
     @Description("Assert that time of chat transferring is less than 20 seconds")
-    @Test(enabled = false)
+    @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal", "urlPlatform"})
     public void transferChatTimeTest(String tenant, String agent, String urlPortal, String urlPlatform) throws InterruptedException {
         SoftAssertions assertions = new SoftAssertions();
@@ -39,7 +41,7 @@ public class ChatsPerformanceTest extends BaseWebTest {
 
     @Title("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
     @Description("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
-    @Test(enabled = false)
+    @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void closeChatTimeTest (String tenant, String agent, String urlPortal) {
         SoftAssertions assertions = new SoftAssertions();
@@ -66,8 +68,8 @@ public class ChatsPerformanceTest extends BaseWebTest {
         assertions.assertAll();
     }
 
-    @Title("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
-    @Description("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
+    @Title("Assert the time of moving chat to 'Pending' tab")
+    @Description("Assert the time of moving chat to 'Pending' tab")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void moveChatToPendingTimeTest (String tenant, String agent, String urlPortal) {

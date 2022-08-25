@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="HomeChromeUK2">
+<suite name="chatdesk_demo">
 
-    <parameter name="setBrowser" value="chrome" />
+    <parameter name="setBrowser" value="chrome"/>
     <parameter name="urlPortal"
                value="https://demo-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com"/>
     <parameter name="urlPlatform"
-               value="https://demo-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com" />
+               value="https://demo-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com"/>
     <parameter name="urlChannels"
                value="demo-chatdesk-channels-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com"/>
-    <parameter name="tenant" value="PerformanceTestMykolaAQA" />
-    <parameter name="agent" value="SUPERVISOR" />
-    <parameter name="testPlaneName" value="Orca WhatsApp Chat" />
-    <parameter name="loopCount" value="1" />
-    <parameter name="noOfThreads" value="15" />
-    <parameter name="setRampupNo" value="0" />
-    <parameter name="orcaWAId" value="0182443305c68929d6e2374ebee9c910" />
+    <parameter name="tenant" value="PerformanceTestMykolaAQA"/>
+    <parameter name="agent" value="SUPERVISOR"/>
+    <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
+    <parameter name="loopCount" value="1"/>
+    <parameter name="noOfThreads" value="15"/>
+    <parameter name="setRampupNo" value="0"/>
+
+    <parameter name="orcaWAId" value="0182443305c68929d6e2374ebee9c910"/>
+
+    <parameter name="tenantId" value="017e7d3f1853d67b3a1486a5308af012"/>
+    <parameter name="agentId" value="017e7d3f1b008521e3492c764ad9d408"/>
+
+    <parameter name="departmentAgents" value="1"/>
 
 
-    <test name="HomeChromeUK2">
+    <test name="Chatdesk demo">
 
         <classes>
-            <class name="PagePerformanceTest" />
+            <class name="PagePerformanceTest"/>
+            <class name="ChatsPerformanceTest"/>
+            <class name="SettingsPagePerformanceTest"/>
+            <class name="DepartmentsPerformanceTest"/>
         </classes>
     </test>
 

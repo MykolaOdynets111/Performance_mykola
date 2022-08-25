@@ -1,3 +1,5 @@
+package pages;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
@@ -79,7 +81,7 @@ public abstract class TenantDeskPage extends BasePage {
         unavailableCheckbox.click();
     }
 
-    protected int scrollToLastChat(Page page) throws InterruptedException {
+    public int scrollToLastChat(Page page) throws InterruptedException {
         String firstName;
         int i = 0;
         do {
@@ -99,15 +101,15 @@ public abstract class TenantDeskPage extends BasePage {
 
     }
 
-    protected String getDataTestId(int chatNum){
+    public String getDataTestId(int chatNum){
         return chatItem.nth(chatNum).getAttribute("data-testId");
     }
 
-    protected void clickChatItem(int chatNum) {
+    public void clickChatItem(int chatNum) {
          chatItem.nth(chatNum).click();
     }
 
-    protected boolean isChatPresentOnPage ( String dataTestId) {
+    public boolean isChatPresentOnPage(String dataTestId) {
         for (int i = 0; i <= chatItem.count(); i++) {
             if (chatItem.nth(i).getAttribute("data-testId").equals(dataTestId)) {
                 return true;

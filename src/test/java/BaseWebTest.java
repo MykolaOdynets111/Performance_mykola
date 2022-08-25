@@ -1,10 +1,14 @@
 import com.microsoft.playwright.options.LoadState;
+import org.apache.log4j.*;
+import utils.ClosingChats;
+import pages.DashboardPage;
+import pages.LoginPage;
+import pages.SupervisorDeskPage;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.control.gui.TestPlanGui;
-import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -22,11 +26,12 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.testelement.TestPlan;
 
+
+
 import org.apache.jorphan.collections.HashTree;
 import org.testng.annotations.AfterMethod;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import com.microsoft.playwright.*;
 
@@ -41,10 +46,12 @@ public class BaseWebTest {
     protected SupervisorDeskPage supervisorDeskPage;
     protected BrowserContext context;
     protected Playwright playwright;
+    protected static Logger logger = Logger.getLogger(BaseWebTest.class);
 
     @BeforeMethod
     @Parameters({"urlPlatform", "testPlaneName", "loopCount", "noOfThreads", "setRampupNo", "urlChannels", "orcaWAId"})
     public void setup(String urlPlatform, String testPlanName, String loopCount, int noOfThreads, int setRampupNo, String urlChannels, String orcaWAId) throws Exception {
+        logger.setLevel(Level.INFO);
         //Load the application using jmeter:
         StandardJMeterEngine jMeterEngine = new StandardJMeterEngine();
         JMeterUtils.loadJMeterProperties("/Users/modynets/Documents/Roku/apache-jmeter-5.4.3/bin/jmeter.properties");
@@ -57,12 +64,20 @@ public class BaseWebTest {
         HashTree testPlanTree = configureTestPlan(testPlanName, noOfThreads, setRampupNo, urlChannels, loopCount, orcaWAId);
         jMeterEngine.configure(testPlanTree);
         jMeterEngine.run();
-        System.out.println("Jmeter engine run");
+        logger.error("Jmeter engine run");
+//        System.out.println("Jmeter engine run");
         while (jMeterEngine.isActive()) {
             Thread.sleep(1000);
             System.out.println(jMeterEngine.isActive());
         }
-        System.out.println("jmeter is stopped");
+
+        logger.debug("My Debug Log");
+        logger.info("My Info Log");
+        logger.warn("My Warn Log");
+        logger.error("My error log");
+        logger.fatal("My fatal log");
+
+        logger.info("jmeter is stopped");
         //running playwright for measure pages interaction:
         playwright = Playwright.create();
         browser = playwright.chromium()
@@ -88,7 +103,7 @@ public class BaseWebTest {
         testPlan.setUserDefinedVariables((Arguments) new ArgumentsPanel().createTestElement());
         testPlan.setProperty(TestElement.TEST_CLASS, TestPlan.class.getName());
         testPlan.setProperty(TestElement.GUI_CLASS, TestPlanGui.class.getName());
-        System.out.println("set Test Plan = " + testPlanName);
+        logger.info("set Test Plan = " + testPlanName);
         return testPlan;
 
     }
@@ -103,7 +118,7 @@ public class BaseWebTest {
         setupThreadGroup.setEnabled(true);
         setupThreadGroup.setSamplerController(loopController);
         setupThreadGroup.setIsSameUserOnNextIteration(true);
-        System.out.println("Initialized Thread Group");
+        logger.info("Initialized Thread Group");
         setupThreadGroup.setProperty(TestElement.TEST_CLASS, ThreadGroup.class.getName());
         setupThreadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         return setupThreadGroup;
@@ -118,7 +133,6 @@ public class BaseWebTest {
         loopController.initialize();
         loopController.setEnabled(true);
         loopController.setName("Loop Controller");
-        System.out.println("Initalized Loop Controller");
         return loopController;
     }
 
@@ -190,6 +204,8 @@ public class BaseWebTest {
     protected long waitWilePageFullyLoaded(Page page) {
         long timeBeforeLoading = System.currentTimeMillis() / 1000l;
         page.waitForLoadState(LoadState.NETWORKIDLE);
+        page.waitForLoadState(LoadState.LOAD);
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         long timeAfterLoading = System.currentTimeMillis() / 1000l;
 
         return (timeAfterLoading - timeBeforeLoading);
@@ -197,10 +213,10 @@ public class BaseWebTest {
 
 
     @AfterMethod
-    public void killDriverInstance() {
+    @Parameters({"tenantId", "agentId", "urlPlatform"})
+    public void killDriverInstance(String tenantId, String agentId, String urlPlatform) {
         ClosingChats.main();
         browser.close();
-
 
     }
 
