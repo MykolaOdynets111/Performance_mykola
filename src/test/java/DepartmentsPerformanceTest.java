@@ -1,17 +1,16 @@
 
+import io.qameta.allure.Description;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import pages.DepartmentManagementPage;
-import ru.yandex.qatools.allure.annotations.Description;
-import ru.yandex.qatools.allure.annotations.Title;
+import utils.AllureLogger;
 
 
-public class DepartmentsPerformanceTest extends BaseWebTest {
+public class DepartmentsPerformanceTest extends BaseTest {
     Assertion assertions = new Assertion();
 
 
-    @Title("Assert the time of department creation is less than 20 seconds")
     @Description("Assert the time of department creation is less than 20 seconds")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal", "departmentAgents"})
@@ -27,7 +26,9 @@ public class DepartmentsPerformanceTest extends BaseWebTest {
         departmentManagementPage.createNewDepartment();
         long currentTimeAfterCreation = System.currentTimeMillis();
         long creationTime = currentTimeAfterCreation - currentTimeBeforeCreation;
-        System.out.println("New department with " + countOfAgents + " agents" + " was created in " + creationTime + " milliseconds");
+        AllureLogger.logToAllure("New department with " + countOfAgents + " agents" + " was created in " + creationTime + " milliseconds");
+        saveScreenshot(departmentManagementPage.getPage().screenshot());
+        logger.info("New department with " + countOfAgents + " agents" + " was created in " + creationTime + " milliseconds");
         assertions.assertTrue(creationTime / 1000l < 20, "New department was crated longer than 20 seconds");
     }
 

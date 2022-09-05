@@ -4,7 +4,7 @@ import com.microsoft.playwright.Page;
 
 public abstract class BasePage {
 
-    protected  Page page;
+    protected Page page;
 
     BasePage(Page page) {
         this.page = page;
@@ -14,7 +14,7 @@ public abstract class BasePage {
         return page.title();
     }
 
-    public  Page getPage() {
+    public Page getPage() {
         return page;
     }
 

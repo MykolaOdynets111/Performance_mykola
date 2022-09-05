@@ -10,6 +10,57 @@
       </elementProp>
     </TestPlan>
     <org.apache.jorphan.collections.HashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Orca WhatsApp Chat" enabled="true">
+        <intProp name="ThreadGroup.num_threads">15</intProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <intProp name="num_threads">15</intProp>
+        <intProp name="ramp_time">0</intProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <org.apache.jorphan.collections.HashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="OrcaWhatsappChat" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;eventId&quot;:&quot;AQA60&quot;,&quot;providerId&quot;:&quot;TOUCH&quot;,&quot;routeId&quot;:&quot;0182443305c68929d6e2374ebee9c910&quot;,&quot;sourceId&quot;:&quot;${__Random(100000,10000000)}&quot;,&quot;sessionId&quot;:&quot;2121212121212&quot;,&quot;content&quot;:{&quot;event&quot;:{&quot;eventType&quot;:&quot;TEXT&quot;,&quot;text&quot;:&quot;connect to Support&quot;}},&quot;externalReferenceId&quot;:&quot;RefId13&quot;}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <elementProp name="HTTPSampler.header_manager" elementType="HeaderManager" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
+              </elementProp>
+              <elementProp name="Accept" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">*/*</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">demo-chatdesk-channels-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com</stringProp>
+          <stringProp name="HTTPSampler.path">orca/message</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        </HTTPSamplerProxy>
+        <org.apache.jorphan.collections.HashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp reference="../../../HTTPSamplerProxy/elementProp[2]/collectionProp"/>
+          </HeaderManager>
+          <org.apache.jorphan.collections.HashTree/>
+        </org.apache.jorphan.collections.HashTree>
+      </org.apache.jorphan.collections.HashTree>
       <ResultCollector>
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
@@ -47,57 +98,6 @@
         <stringProp name="filename">src/main/resources/Results.jtl</stringProp>
       </ResultCollector>
       <org.apache.jorphan.collections.HashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Orca WhatsApp Chat" enabled="true">
-        <intProp name="ThreadGroup.num_threads">10</intProp>
-        <intProp name="ThreadGroup.ramp_time">0</intProp>
-        <intProp name="num_threads">10</intProp>
-        <intProp name="ramp_time">0</intProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
-        </elementProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-      </ThreadGroup>
-      <org.apache.jorphan.collections.HashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="OrcaWhatsappChat" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;eventId&quot;:&quot;AQA60&quot;,&quot;providerId&quot;:&quot;TOUCH&quot;,&quot;routeId&quot;:&quot;017e7d405768f1b6ed17992fa574128b&quot;,&quot;sourceId&quot;:&quot;${__Random(100000,10000000)}&quot;,&quot;sessionId&quot;:&quot;2121212121212&quot;,&quot;content&quot;:{&quot;event&quot;:{&quot;eventType&quot;:&quot;TEXT&quot;,&quot;text&quot;:&quot;connect to Support&quot;}},&quot;externalReferenceId&quot;:&quot;RefId13&quot;}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <elementProp name="HTTPSampler.header_manager" elementType="HeaderManager" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="Content-Type" elementType="Header">
-                <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
-              </elementProp>
-              <elementProp name="Accept" elementType="Header">
-                <stringProp name="Header.name">Accept</stringProp>
-                <stringProp name="Header.value">*/*</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain">stage-chatdesk-channels-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com</stringProp>
-          <stringProp name="HTTPSampler.path">orca/message</stringProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-        </HTTPSamplerProxy>
-        <org.apache.jorphan.collections.HashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp reference="../../../HTTPSamplerProxy/elementProp[2]/collectionProp"/>
-          </HeaderManager>
-          <org.apache.jorphan.collections.HashTree/>
-        </org.apache.jorphan.collections.HashTree>
-      </org.apache.jorphan.collections.HashTree>
     </org.apache.jorphan.collections.HashTree>
   </org.apache.jorphan.collections.HashTree>
 </jmeterTestPlan>

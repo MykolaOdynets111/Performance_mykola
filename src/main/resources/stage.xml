@@ -10,6 +10,10 @@
                value="https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
     <parameter name="urlChannels"
                value="stage-chatdesk-channels-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
+
+    <parameter name="domain" value="int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
+
+
     <parameter name="tenant" value="PerformanceIhor3"/>
     <parameter name="agent" value="SUPERVISOR"/>
     <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
@@ -20,10 +24,9 @@
 
     <parameter name="orcaWAId" value="017e7d405768f1b6ed17992fa574128b"/>
 
-    <parameter name="tenantId" value="01824432fb2bd1342e2184ca81095870"/>
-    <parameter name="agentId" value="01824433002ef4ba120a905b05ce2d69"/>
 
-
+    <parameter name="tenantId" value="017e7d3f1853d67b3a1486a5308af012"/>
+    <parameter name="agentId" value="017e7d3f1b008521e3492c764ad9d408"/>
 
 
     <parameter name="departmentAgents" value="5"/>
@@ -32,10 +35,10 @@
     <test name="Chatdesk stage">
 
         <classes>
-<!--            <class name="PagePerformanceTest"/>-->
-<!--            <class name="ChatsPerformanceTest"/>-->
-            <class name="SettingsPagePerformanceTest"/>
-<!--            <class name="DepartmentsPerformanceTest"/>-->
+                        <class name="PagePerformanceTest"/>
+<!--                        <class name="ChatsPerformanceTest"/>-->
+<!--            <class name="SettingsPagePerformanceTest"/>-->
+            <!--            <class name="DepartmentsPerformanceTest"/>-->
         </classes>
     </test>
 

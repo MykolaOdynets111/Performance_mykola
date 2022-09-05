@@ -13,12 +13,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- LITS properties -->
         <assertj.version>3.11.1</assertj.version>
-        <aspectj.version>1.9.2</aspectj.version>
+        <aspectj.version>1.9.9.1</aspectj.version>
 
         <testng.version>6.14.3</testng.version>
 
         <faker.version>0.16</faker.version>
-        <lombok.version>1.18.4</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <!-- plugins versions -->
         <java.compiler.version>1.8</java.compiler.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
@@ -144,12 +144,16 @@
                     <reuseForks>false</reuseForks>
                     <testFailureIgnore>true</testFailureIgnore>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
                     <forkMode>never</forkMode>
                     <systemPropertyVariables>
                         <reporter.debug>false</reporter.debug>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
-<!--                        <suiteXmlFile>src/main/resources/uk2_chrome.xml</suiteXmlFile>-->
+                        <suiteXmlFile>src/main/resources/stage.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>src/main/resources/demo.xml</suiteXmlFile>-->
                     </suiteXmlFiles>
                 </configuration>
             </plugin>

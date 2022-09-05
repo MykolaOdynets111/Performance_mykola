@@ -3,6 +3,8 @@ package pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.SelectOption;
+import com.microsoft.playwright.options.WaitUntilState;
+import io.qameta.allure.Step;
 
 
 public class LoginPage extends BasePage {
@@ -24,8 +26,9 @@ public class LoginPage extends BasePage {
         return new DashboardPage(page);
     }
 
-    public void navigate(String uRL) {
-        page.navigate(uRL);
+    public void navigate(String uRL, Page.NavigateOptions navigateOptions) {
+        page.navigate(uRL, new Page.NavigateOptions()
+                .setWaitUntil(WaitUntilState.NETWORKIDLE));
     }
 
     public LoginPage setTenant(String tenantName) {
@@ -45,7 +48,8 @@ public class LoginPage extends BasePage {
 
     }
 
-    public LoginPage loginTenant (String tenant, String agent){
+    @Step("Log in as tenant {0}, agent {1}")
+    public LoginPage loginTenant(String tenant, String agent) {
         return this.setTenant(tenant)
                 .setAgent(agent)
                 .pressAuthenticateButton()

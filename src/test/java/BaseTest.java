@@ -1,4 +1,7 @@
 import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.WaitUntilState;
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import org.apache.log4j.*;
 import utils.ClosingChats;
 import pages.DashboardPage;
@@ -27,29 +30,30 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.testelement.TestPlan;
 
 
-
 import org.apache.jorphan.collections.HashTree;
 import org.testng.annotations.AfterMethod;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import com.microsoft.playwright.*;
+import utils.RemovingDepartments;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class BaseWebTest {
+public abstract class BaseTest {
     protected static Browser browser;
     protected LoginPage loginPage;
     protected DashboardPage dashboardPage;
     protected SupervisorDeskPage supervisorDeskPage;
     protected BrowserContext context;
     protected Playwright playwright;
-    protected static Logger logger = Logger.getLogger(BaseWebTest.class);
+    protected static Logger logger = Logger.getLogger(BaseTest.class);
 
     @BeforeMethod
     @Parameters({"urlPlatform", "testPlaneName", "loopCount", "noOfThreads", "setRampupNo", "urlChannels", "orcaWAId"})
+    @Step("Setup")
     public void setup(String urlPlatform, String testPlanName, String loopCount, int noOfThreads, int setRampupNo, String urlChannels, String orcaWAId) throws Exception {
         logger.setLevel(Level.INFO);
         //Load the application using jmeter:
@@ -64,18 +68,11 @@ public class BaseWebTest {
         HashTree testPlanTree = configureTestPlan(testPlanName, noOfThreads, setRampupNo, urlChannels, loopCount, orcaWAId);
         jMeterEngine.configure(testPlanTree);
         jMeterEngine.run();
-        logger.error("Jmeter engine run");
-//        System.out.println("Jmeter engine run");
+        logger.info("Jmeter engine run");
         while (jMeterEngine.isActive()) {
             Thread.sleep(1000);
             System.out.println(jMeterEngine.isActive());
         }
-
-        logger.debug("My Debug Log");
-        logger.info("My Info Log");
-        logger.warn("My Warn Log");
-        logger.error("My error log");
-        logger.fatal("My fatal log");
 
         logger.info("jmeter is stopped");
         //running playwright for measure pages interaction:
@@ -90,7 +87,8 @@ public class BaseWebTest {
         Page page = context.newPage();
         loginPage = new LoginPage(page);
         dashboardPage = new DashboardPage(page);
-        loginPage.navigate(urlPlatform + "/internal/static/auth-tool");
+        loginPage.navigate(urlPlatform + "/internal/static/auth-tool", new Page.NavigateOptions()
+                .setWaitUntil(WaitUntilState.NETWORKIDLE));
     }
 
 
@@ -203,8 +201,8 @@ public class BaseWebTest {
 
     protected long waitWilePageFullyLoaded(Page page) {
         long timeBeforeLoading = System.currentTimeMillis() / 1000l;
-        page.waitForLoadState(LoadState.NETWORKIDLE);
         page.waitForLoadState(LoadState.LOAD);
+        page.waitForLoadState(LoadState.NETWORKIDLE);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         long timeAfterLoading = System.currentTimeMillis() / 1000l;
 
@@ -213,12 +211,28 @@ public class BaseWebTest {
 
 
     @AfterMethod
-    @Parameters({"tenantId", "agentId", "urlPlatform"})
-    public void killDriverInstance(String tenantId, String agentId, String urlPlatform) {
-        ClosingChats.main();
+    @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
+    public void clearTestData(String tenantId, String agentId, String urlPlatform, String domain) {
+        ClosingChats closingChats = new ClosingChats();
+        closingChats.main(tenantId, agentId, urlPlatform, domain);
+        RemovingDepartments removingDepartments = new RemovingDepartments();
+        removingDepartments.main(tenantId, agentId, urlPlatform, domain);
         browser.close();
 
     }
+
+
+    @Attachment(value = "{0}", type = "text/plain")
+    protected String saveTextLog (String message) {
+        return message;
+    }
+
+    @Attachment(value = "Page screenshot", type = "image/png")
+    protected byte[] saveScreenshot(byte[] screenShot) {
+        return screenShot;
+    }
+
+
 
 
 }

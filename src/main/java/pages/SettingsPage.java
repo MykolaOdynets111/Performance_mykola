@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Step;
 import pages.setingsTabs.*;
 
 
@@ -27,7 +28,7 @@ public class SettingsPage extends BasePage {
         return new BusinessProfileTab(page);
     }
 
-    public ChatTagsTab openChatsTagTab() {
+    public ChatTagsTab openChatsTagTab(Page page) {
         chatTagsTabTitle.click();
         return new ChatTagsTab(page);
     }
@@ -46,10 +47,5 @@ public class SettingsPage extends BasePage {
         surveysTabTitle.click();
         return new SurveysTab(page);
     }
-
-
-
-
-
 
 }

@@ -3,59 +3,64 @@ package utils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class ClosingChats {
+    private static Logger logger = Logger.getLogger(ClosingChats.class);
 
-    private static String tenantId = "017e7d3f1853d67b3a1486a5308af012";
-    private static String agentId = "017e7d3f1b008521e3492c764ad9d408";
-    private static String authURL = "https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/auth/fake-auth-token?agentId="+agentId+"&tenantId="+tenantId+"&domain=.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com&createFakeMc2Token=true";
-
-    public static void main() {
+    public void main(String tenantId, String agentId, String urlPlatform, String domain) {
+        logger.setLevel(Level.INFO);
+        String authURL = urlPlatform + "/internal/auth/fake-auth-token?agentId=" + agentId + "&tenantId=" + tenantId + "&domain=." + domain + "&createFakeMc2Token=true";
         int idsQuantity = 0;
         do {
-            System.out.println(getJWT());
-            List<String> conversationIds = getChats();
-            System.out.println(conversationIds);
+            List<String> conversationIds = getChats(authURL, urlPlatform);
             idsQuantity = conversationIds.size();
-            System.out.println("New chats quantity: " + conversationIds.size());
 
-            int i =1;
-            String jwt = getJWT();
-            for(String conversationId : conversationIds) {
-                System.out.println(i++ + " of " + idsQuantity);
-                Response response = closeChats(jwt, conversationId);
+            AllureLogger.logToAllure("New chats quantity: " + conversationIds.size());
+            logger.info("New chats quantity: " + conversationIds.size());
+
+            int i = 1;
+            String jwt = getJWT(authURL);
+            for (String conversationId : conversationIds) {
+                logger.info("Closing " + (i++) + " of " + idsQuantity + " chats");
+                Response response = closeChats(jwt, conversationId, urlPlatform);
                 if (response.getStatusCode() != 200) {
-                    System.out.println(response.getBody().asString());
-                    jwt = ClosingChats.getJWT();
-                    closeChats(jwt, conversationId);
+                    AllureLogger.logToAllure(response.getBody().asString());
+                    logger.info(response.getBody().asString());
+                    jwt = getJWT(authURL);
+                    closeChats(jwt, conversationId, urlPlatform);
                 }
             }
-        }while( idsQuantity> 0);
+
+        } while (idsQuantity > 0);
+
     }
 
-    public static String getJWT(){
+    public String getJWT(String authURL) {
         return RestAssured.given().contentType(ContentType.JSON).get(authURL).getBody().jsonPath().getString("jwt");
     }
 
-    public static Response closeChats(String jwt, String conversationId){
+    public static Response closeChats(String jwt, String conversationId, String urlPlatform) {
         return RestAssured.given()
                 .accept(ContentType.JSON)
                 .header("Authorization",
                         jwt)
-                .get(String.format("https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/api/chats/close-chat-by-id?chatId=%s", conversationId));}
+                .get(String.format("%s/api/chats/close-chat-by-id?chatId=%s", urlPlatform, conversationId));
+    }
 
-    public static List<String> getChats(){
+    public List<String> getChats(String authURL, String urlPlatform) {
         Response response = RestAssured.given().contentType(ContentType.JSON)
-                .header("Authorization", ClosingChats.getJWT())
+                .header("Authorization", getJWT(authURL))
                 .body("{\n" +
                         "  \"chatStates\": [\n" +
                         "    \"LIVE_IN_SCHEDULER_QUEUE\",\n" +
                         "    \"LIVE_ASSIGNED_TO_AGENT\"\n" +
                         "  ]\n" +
                         "}")
-                .post("https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/api/chats/search?page=0&size=200");
-         return response.getBody().jsonPath().getList("content.chatId");
+                .post(urlPlatform + "/api/chats/search?page=0&size=200");
+        return response.getBody().jsonPath().getList("content.chatId");
     }
 }

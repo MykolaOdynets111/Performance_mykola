@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.LoadState;
 
 public abstract class TenantDeskPage extends BasePage {
 
+    private static final String DATA_TEST_ID = "data-testId";
     private final Locator closedChatsTab;
     private final Locator ticketsTab;
     private final Locator pendingTab;
@@ -20,7 +21,7 @@ public abstract class TenantDeskPage extends BasePage {
     private final Locator chatItem;
 
 
-    public TenantDeskPage(Page page) {
+    protected TenantDeskPage(Page page) {
         super(page);
         this.closedChatsTab = page.locator("[data-testid=\"tab-navigation-panel-closed\"]");
         this.ticketsTab = page.locator("[data-testid=\"tab-navigation-panel-tickets\"]");
@@ -70,10 +71,13 @@ public abstract class TenantDeskPage extends BasePage {
         historyTab.click();
     }
 
-    public LoggedoutPage logOut(Page page) {
+    public LoggedOutPage logOut(Page page) {
         demoLink.click();
         logOutLink.click();
-        return new LoggedoutPage(page);
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        page.waitForLoadState(LoadState.LOAD);
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+        return new LoggedOutPage(page);
     }
 
     public void setUnavailableCheckbox() {
@@ -86,7 +90,7 @@ public abstract class TenantDeskPage extends BasePage {
         int i = 0;
         do {
             Locator first = chatItem.nth(chatItem.count() - 1);
-            firstName = first.getAttribute("data-testId");
+            firstName = first.getAttribute(DATA_TEST_ID);
             first.scrollIntoViewIfNeeded();
 
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);
@@ -96,28 +100,37 @@ public abstract class TenantDeskPage extends BasePage {
             i++;
 
         }
-        while (!firstName.equals(chatItem.nth(chatItem.count() - 1).getAttribute("data-testId")));
+        while (!firstName.equals(chatItem.nth(chatItem.count() - 1).getAttribute(DATA_TEST_ID)));
         return i;
 
     }
 
-    public String getDataTestId(int chatNum){
-        return chatItem.nth(chatNum).getAttribute("data-testId");
+    public String getDataTestId(int chatNum) {
+        return chatItem.nth(chatNum).getAttribute(DATA_TEST_ID);
     }
 
     public void clickChatItem(int chatNum) {
-         chatItem.nth(chatNum).click();
+        chatItem.nth(chatNum).click();
     }
 
     public boolean isChatPresentOnPage(String dataTestId) {
-        for (int i = 0; i <= chatItem.count(); i++) {
-            if (chatItem.nth(i).getAttribute("data-testId").equals(dataTestId)) {
+        for (int i = 0; i <= (chatItem.count() - 1); i++) {
+            chatItem.nth(i).waitFor();
+            page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+            if (chatItem.nth(i).getAttribute(DATA_TEST_ID).equals(dataTestId)) {
                 return true;
             }
+
         }
         return false;
     }
 
-
+    public void waitWhileChatDisappearFromPage(String issuedDataTestId) throws InterruptedException {
+        chatItem.nth(0).waitFor();
+        do {
+            Thread.sleep(1000);
+        }
+        while (chatItem.nth(0).getAttribute("data-testid").equals(issuedDataTestId));
+    }
 
 }
