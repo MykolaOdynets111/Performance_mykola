@@ -32,13 +32,14 @@ public class AgentDeskPage extends TenantDeskPage {
     private final Locator pendingButton;
 
 
-    public void transferChat(int agent, int chatNum) throws InterruptedException {
+    public void checkChatForTransferring(int agent, int chatNum) throws InterruptedException {
         clickChatItem(chatNum);
         transferIcon.click();
         selectTransferAgent(agent);
         page.isEnabled("//textarea[@name='agentNote']");
-
         agentNotesArea.fill("Transfer");
+    }
+    public void confirmTransfer(){
         transferBtn.click();
     }
 

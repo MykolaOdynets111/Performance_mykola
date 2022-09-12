@@ -19,7 +19,7 @@
     <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
 
     <parameter name="loopCount" value="1"/>
-    <parameter name="noOfThreads" value="10"/>
+    <parameter name="noOfThreads" value="200"/>
     <parameter name="setRampupNo" value="0"/>
 
     <parameter name="orcaWAId" value="017e7d405768f1b6ed17992fa574128b"/>
@@ -29,16 +29,18 @@
     <parameter name="agentId" value="017e7d3f1b008521e3492c764ad9d408"/>
 
 
-    <parameter name="departmentAgents" value="5"/>
+    <parameter name="departmentAgents" value="1"/>
 
 
     <test name="Chatdesk stage">
 
+
+
         <classes>
-                        <class name="PagePerformanceTest"/>
-<!--                        <class name="ChatsPerformanceTest"/>-->
+<!--            <class name="PagePerformanceTest"/>-->
+            <class name="ChatsPerformanceTest"/>
 <!--            <class name="SettingsPagePerformanceTest"/>-->
-            <!--            <class name="DepartmentsPerformanceTest"/>-->
+<!--            <class name="DepartmentsPerformanceTest"/>-->
         </classes>
     </test>
 

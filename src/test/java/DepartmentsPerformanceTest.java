@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import pages.DepartmentManagementPage;
 import utils.AllureLogger;
+import utils.ApachePOIExcelWrite;
 
 
 public class DepartmentsPerformanceTest extends BaseTest {
@@ -15,6 +16,8 @@ public class DepartmentsPerformanceTest extends BaseTest {
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal", "departmentAgents"})
     public void departmentCreationTimeTest(String tenant, String agent, String urlPortal, int countOfAgents) {
+        ApachePOIExcelWrite.testresultdata.put("Department section test ", "" );
+        ApachePOIExcelWrite.testresultdata.put("------------------", "");
 
         loginPage.loginTenant(tenant, agent);
         waitWilePageFullyLoaded(loginPage.getPage());
@@ -27,6 +30,8 @@ public class DepartmentsPerformanceTest extends BaseTest {
         long currentTimeAfterCreation = System.currentTimeMillis();
         long creationTime = currentTimeAfterCreation - currentTimeBeforeCreation;
         AllureLogger.logToAllure("New department with " + countOfAgents + " agents" + " was created in " + creationTime + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("New department with " + countOfAgents + " agents" + " was created in, milliseconds ", creationTime );
+
         saveScreenshot(departmentManagementPage.getPage().screenshot());
         logger.info("New department with " + countOfAgents + " agents" + " was created in " + creationTime + " milliseconds");
         assertions.assertTrue(creationTime / 1000l < 20, "New department was crated longer than 20 seconds");

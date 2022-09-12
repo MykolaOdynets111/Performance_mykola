@@ -18,7 +18,7 @@
     <parameter name="agent" value="SUPERVISOR"/>
     <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
     <parameter name="loopCount" value="1"/>
-    <parameter name="noOfThreads" value="15"/>
+    <parameter name="noOfThreads" value="8"/>
     <parameter name="setRampupNo" value="0"/>
 
     <parameter name="orcaWAId" value="0182443305c68929d6e2374ebee9c910"/>
@@ -38,6 +38,7 @@
             <class name="PagePerformanceTest"/>
             <class name="SettingsPagePerformanceTest"/>
             <class name="DepartmentsPerformanceTest"/>
+<!--            <class name="TicketsPerformanceTest"/>-->
         </classes>
     </test>
 

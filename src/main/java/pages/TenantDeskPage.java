@@ -95,7 +95,7 @@ public abstract class TenantDeskPage extends BasePage {
 
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);
             page.waitForLoadState(LoadState.LOAD);
-            page.waitForLoadState(LoadState.NETWORKIDLE);
+//            page.waitForLoadState(LoadState.NETWORKIDLE);
             Thread.sleep(1000);
             i++;
 

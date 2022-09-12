@@ -1,10 +1,10 @@
 import io.qameta.allure.Description;
 import pages.AgentDeskPage;
 import pages.LoggedOutPage;
-import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import utils.AllureLogger;
+import utils.ApachePOIExcelWrite;
 
 public class PagePerformanceTest extends BaseTest {
 
@@ -13,7 +13,8 @@ public class PagePerformanceTest extends BaseTest {
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void pagesDownloadingTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
-        SoftAssertions assertions = new SoftAssertions();
+        ApachePOIExcelWrite.testresultdata.put("Pages Download time test ", "");
+        ApachePOIExcelWrite.testresultdata.put("------------------", "");
         long timeBeforeLoadingLoginPage = System.currentTimeMillis();
         loginPage.loginTenant(tenant, agent);
         waitWilePageFullyLoaded(loginPage.getPage());
@@ -21,6 +22,7 @@ public class PagePerformanceTest extends BaseTest {
         long timeOfTenantLogin = timeAfterLoadingLoginPage - timeBeforeLoadingLoginPage;
         saveScreenshot(loginPage.getPage().screenshot());
         AllureLogger.logToAllure("Tenant was logged in " + (timeOfTenantLogin) + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Tenant was logged in ", timeOfTenantLogin);
         logger.info("Tenant was logged in " + (timeOfTenantLogin) + " milliseconds");
         assertions.assertThat(timeOfTenantLogin / 1000l)
                 .as("Time of Tenant Log-in is longer than 20 seconds")
@@ -31,6 +33,7 @@ public class PagePerformanceTest extends BaseTest {
         long timeAfterLoadingDashboardPage = System.currentTimeMillis();
         long timeOfLoadingDashboardPage = timeAfterLoadingDashboardPage - timeBeforeLoadingDashboardPage;
         AllureLogger.logToAllure("Dashboard page was uploaded in " + (timeOfLoadingDashboardPage) + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Dashboard page was uploaded in ", timeOfLoadingDashboardPage);
         saveScreenshot(dashboardPage.getPage().screenshot());
         logger.info("Dashboard page was uploaded in " + (timeOfLoadingDashboardPage) + " milliseconds");
         assertions.assertThat(timeOfLoadingDashboardPage / 1000l)
@@ -42,6 +45,7 @@ public class PagePerformanceTest extends BaseTest {
         long timeAfterLoadingSupervisor = System.currentTimeMillis();
         long timeOfLoadingSupervisorPage = timeAfterLoadingSupervisor - timeBeforeLoadingSupervisor;
         AllureLogger.logToAllure("Supervisor page was uploaded in " + (timeOfLoadingSupervisorPage) + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Supervisor page was uploaded in ", timeOfLoadingSupervisorPage);
         saveScreenshot(supervisorDeskPage.getPage().screenshot());
         logger.info("Supervisor page was uploaded in " + (timeOfLoadingSupervisorPage) + " milliseconds");
         assertions.assertThat(timeOfLoadingSupervisorPage / 1000l)
@@ -51,12 +55,15 @@ public class PagePerformanceTest extends BaseTest {
         int countScrollingIterations = supervisorDeskPage.scrollToLastChat(supervisorDeskPage.getPage());
         waitWilePageFullyLoaded(supervisorDeskPage.getPage());
         long timeAfterScrollingSupervisor = System.currentTimeMillis();
-        long timeOfScrollingSupervisorPage = timeAfterScrollingSupervisor - timeBeforeScrollingSupervisor;
+        long timeOfScrollingSupervisorPage = timeAfterScrollingSupervisor - timeBeforeScrollingSupervisor -
+                (countScrollingIterations* 1000L);
         AllureLogger.logToAllure("Time of scrolling to the end of the page is " + timeOfScrollingSupervisorPage + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Time of scrolling to the end of the page is ", timeOfScrollingSupervisorPage);
         saveScreenshot(supervisorDeskPage.getPage().screenshot());
         logger.info("Time of scrolling to the end of the page is " + timeOfScrollingSupervisorPage + " milliseconds");
         long averageOfScrolling = timeOfScrollingSupervisorPage / countScrollingIterations;
         AllureLogger.logToAllure("Average value for scrolling chats is " + averageOfScrolling + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Average value for scrolling chats is ", averageOfScrolling);
         logger.info("Average value for scrolling chats is " + averageOfScrolling + " milliseconds");
         assertions.assertThat(averageOfScrolling)
                 .as("Time of scrolling screen, takes more than 5 seconds")
@@ -67,6 +74,7 @@ public class PagePerformanceTest extends BaseTest {
         long TimeAfterSwitching = System.currentTimeMillis();
         long timeOfSwitchToAgentPage = TimeAfterSwitching - TimeBeforeSwitching;
         AllureLogger.logToAllure("Switching from Supervisor to Agent page takes " + timeOfSwitchToAgentPage + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Switching from Supervisor to Agent page takes ", timeOfSwitchToAgentPage );
         saveScreenshot(agentDeskPage.getPage().screenshot());
         logger.info("Switching from Supervisor to Agent page takes " + timeOfSwitchToAgentPage + " milliseconds");
         assertions.assertThat(timeOfSwitchToAgentPage / 1000l)
@@ -78,6 +86,7 @@ public class PagePerformanceTest extends BaseTest {
         long TimeAfterLogout = System.currentTimeMillis();
         long timeOfLogout = TimeAfterLogout - TimeBeforeLogout;
         AllureLogger.logToAllure("Tenant was logged out in  " + timeOfLogout + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put("Tenant was logged out in  ", timeOfLogout);
         saveScreenshot(loggedoutPage.getPage().screenshot());
         logger.info("Tenant was logged out in  " + timeOfLogout + " milliseconds");
         assertions.assertThat(timeOfSwitchToAgentPage / 1000l)

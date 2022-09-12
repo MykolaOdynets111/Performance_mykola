@@ -10,14 +10,15 @@ import org.testng.annotations.Test;
 import pages.SettingsPage;
 import pages.setingsTabs.*;
 import utils.AllureLogger;
+import utils.ApachePOIExcelWrite;
 
 public class SettingsPagePerformanceTest extends BaseTest {
-    SoftAssertions assertions = new SoftAssertions();
-
     @Description("Assert the time of open tabs in Settings page")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void openSettingsTabsTest(String tenant, String agent, String urlPortal) {
+        ApachePOIExcelWrite.testresultdata.put("Settings page tabs time opening time  ", "" );
+        ApachePOIExcelWrite.testresultdata.put("------------------", "");
 
         loginPage.loginTenant(tenant, agent);
         waitWilePageFullyLoaded(loginPage.getPage());
@@ -61,6 +62,7 @@ public class SettingsPagePerformanceTest extends BaseTest {
         long tabsOpenTime = currentTimeAfterOpening - currentTimeBeforeOpening;
         saveScreenshot(settingsPage.getPage().screenshot());
         AllureLogger.logToAllure(tab + " table open time = " + tabsOpenTime + " milliseconds");
+        ApachePOIExcelWrite.testresultdata.put(tab + " table open time, milliseconds ", tabsOpenTime );
         logger.info(tab + " table open time = " + tabsOpenTime + " milliseconds");
 
 //        saveTextLog(tab + " open time = " + tabsOpenTime + " milliseconds");

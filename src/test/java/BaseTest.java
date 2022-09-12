@@ -3,6 +3,10 @@ import com.microsoft.playwright.options.WaitUntilState;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.apache.log4j.*;
+import org.assertj.core.api.SoftAssertions;
+import org.testng.annotations.*;
+import pages.AgentDeskPage;
+import utils.ApachePOIExcelWrite;
 import utils.ClosingChats;
 import pages.DashboardPage;
 import pages.LoginPage;
@@ -31,16 +35,14 @@ import org.apache.jmeter.testelement.TestPlan;
 
 
 import org.apache.jorphan.collections.HashTree;
-import org.testng.annotations.AfterMethod;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
 import com.microsoft.playwright.*;
 import utils.RemovingDepartments;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 public abstract class BaseTest {
     protected static Browser browser;
@@ -50,6 +52,15 @@ public abstract class BaseTest {
     protected BrowserContext context;
     protected Playwright playwright;
     protected static Logger logger = Logger.getLogger(BaseTest.class);
+    protected SoftAssertions assertions = new SoftAssertions();
+
+    @BeforeTest
+    @Parameters({"noOfThreads"})
+    public void setupTest(int noOfThreads){
+        ApachePOIExcelWrite.testresultdata.put("chat count ",  noOfThreads);
+        ApachePOIExcelWrite.testresultdata.put("","");
+    }
+
 
     @BeforeMethod
     @Parameters({"urlPlatform", "testPlaneName", "loopCount", "noOfThreads", "setRampupNo", "urlChannels", "orcaWAId"})
@@ -62,6 +73,7 @@ public abstract class BaseTest {
         JMeterUtils.setJMeterHome("/Users/modynets/Documents/Roku/apache-jmeter-5.4.3");
         JMeterUtils.initLocale();
         SaveService.loadProperties();
+
 
         //running jmeter tests from /jmx file:
         //HashTree testPlanTree = SaveService.loadTree(new File("src/main/resources/jmxFile.jmx"));
@@ -103,7 +115,6 @@ public abstract class BaseTest {
         testPlan.setProperty(TestElement.GUI_CLASS, TestPlanGui.class.getName());
         logger.info("set Test Plan = " + testPlanName);
         return testPlan;
-
     }
 
     private static ThreadGroup setThreadGroup(int noOfThreads, int setRampupNo, LoopController loopController) {
@@ -202,13 +213,43 @@ public abstract class BaseTest {
     protected long waitWilePageFullyLoaded(Page page) {
         long timeBeforeLoading = System.currentTimeMillis() / 1000l;
         page.waitForLoadState(LoadState.LOAD);
-        page.waitForLoadState(LoadState.NETWORKIDLE);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         long timeAfterLoading = System.currentTimeMillis() / 1000l;
 
         return (timeAfterLoading - timeBeforeLoading);
     }
 
+
+
+
+    @Attachment(value = "Page screenshot", type = "image/png")
+    protected byte[] saveScreenshot(byte[] screenShot) {
+        return screenShot;
+    }
+
+    protected Page createNewPage() {
+        Playwright playwright1 = Playwright.create();
+        Browser browser1 = playwright1.chromium()
+                .launch(new BrowserType.LaunchOptions()
+                        .setChannel("chrome")
+                        .setHeadless(false)
+                        .setDevtools(false)
+                );
+        BrowserContext context1 = browser1.newContext();
+        return context1.newPage();
+    }
+
+    protected AgentDeskPage openNewAgentPage(String tenant, String agent, String urlPortal) {
+        return openDashboardPage(tenant, agent, urlPortal).launchAgentDesk(dashboardPage.getPage(), urlPortal);
+    }
+
+    protected DashboardPage openDashboardPage(String tenant, String agent, String urlPortal) {
+        loginPage.loginTenant(tenant, agent);
+        waitWilePageFullyLoaded(loginPage.getPage());
+        DashboardPage dashboardPage = loginPage.navigateDashboard(urlPortal);
+        waitWilePageFullyLoaded(dashboardPage.getPage());
+        return dashboardPage;
+    }
 
     @AfterMethod
     @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
@@ -218,21 +259,19 @@ public abstract class BaseTest {
         RemovingDepartments removingDepartments = new RemovingDepartments();
         removingDepartments.main(tenantId, agentId, urlPlatform, domain);
         browser.close();
-
     }
 
-
-    @Attachment(value = "{0}", type = "text/plain")
-    protected String saveTextLog (String message) {
-        return message;
+    @AfterTest
+    @Parameters({"noOfThreads"})
+    public void closeSuite(int noOfThreads){
+        ApachePOIExcelWrite.setupAfterSuite(noOfThreads);
     }
-
-    @Attachment(value = "Page screenshot", type = "image/png")
-    protected byte[] saveScreenshot(byte[] screenShot) {
-        return screenShot;
-    }
-
-
-
 
 }
+
+
+
+
+
+
+

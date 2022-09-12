@@ -12,12 +12,15 @@ public class SupervisorDeskPage extends TenantDeskPage {
         this.supervisorPopup = page.locator(".cl-agent-view-trigger-btn");
         this.launchAgentBtn = page.locator("text=Launch Agent");
         this.confirmLaunchAgentBtn = page.locator("//div[@class='cl-modal__footer-buttons']/*[2]");
+        this.ticketCheckboxes = page.locator(".cl-checkbox");
+
 
     }
 
     private Locator supervisorPopup;
     private Locator launchAgentBtn;
     private Locator confirmLaunchAgentBtn;
+    private Locator ticketCheckboxes;
 
 
     public AgentDeskPage launchAgent(Page page) {
@@ -28,6 +31,18 @@ public class SupervisorDeskPage extends TenantDeskPage {
         page.waitForLoadState(LoadState.LOAD);
         page.waitForLoadState(LoadState.NETWORKIDLE);
         return new AgentDeskPage(page);
+    }
+
+    public void assignTicket(int ticketNum){
+        ticketCheckboxes.nth(ticketNum).check();
+
+
+
+
+
+
+
+        System.out.println();
     }
 
 }

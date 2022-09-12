@@ -8,12 +8,12 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public class ClosingChats {
+public class ClosingChats extends BaseApiRequests {
     private static Logger logger = Logger.getLogger(ClosingChats.class);
 
     public void main(String tenantId, String agentId, String urlPlatform, String domain) {
         logger.setLevel(Level.INFO);
-        String authURL = urlPlatform + "/internal/auth/fake-auth-token?agentId=" + agentId + "&tenantId=" + tenantId + "&domain=." + domain + "&createFakeMc2Token=true";
+        String authURL = getAuthURL(tenantId, agentId, urlPlatform, domain);
         int idsQuantity = 0;
         do {
             List<String> conversationIds = getChats(authURL, urlPlatform);
@@ -39,9 +39,6 @@ public class ClosingChats {
 
     }
 
-    public String getJWT(String authURL) {
-        return RestAssured.given().contentType(ContentType.JSON).get(authURL).getBody().jsonPath().getString("jwt");
-    }
 
     public static Response closeChats(String jwt, String conversationId, String urlPlatform) {
         return RestAssured.given()

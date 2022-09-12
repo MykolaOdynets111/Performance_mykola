@@ -8,13 +8,13 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public class RemovingDepartments {
+public class RemovingDepartments extends BaseApiRequests {
 
     private static Logger logger = Logger.getLogger(RemovingDepartments.class);
 
     public void main(String tenantId, String agentId, String urlPlatform, String domain) {
         logger.setLevel(Level.INFO);
-        String authURL = urlPlatform + "/internal/auth/fake-auth-token?agentId=" + agentId + "&tenantId=" + tenantId + "&domain=." + domain + "&createFakeMc2Token=true";
+        String authURL =getAuthURL(tenantId,agentId,urlPlatform,domain);
         int idsQuantity = 0;
         do {
             List<String> departmentsIds = getDepartments(authURL, urlPlatform);
@@ -47,14 +47,11 @@ public class RemovingDepartments {
                 .delete(String.format("%s/api/departments/%s", urlPlatform, departmentId));
     }
 
-    public String getJWT(String authURL) {
-        return RestAssured.given().contentType(ContentType.JSON).get(authURL).getBody().jsonPath().getString("jwt");
-    }
 
     public List<String> getDepartments(String authURL, String urlPlatform) {
         Response response = RestAssured.given().contentType(ContentType.JSON)
                 .header("Authorization", getJWT(authURL))
                 .get(urlPlatform + "/api/departments");
-        return response.getBody().jsonPath() .getList("id");
+        return response.getBody().jsonPath().getList("id");
     }
 }
