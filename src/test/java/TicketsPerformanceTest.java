@@ -1,19 +1,16 @@
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitUntilState;
 import io.qameta.allure.Description;
-import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import pages.AgentDeskPage;
-import pages.LoggedOutPage;
 import pages.LoginPage;
 import pages.SupervisorDeskPage;
-import utils.AllureLogger;
 import utils.ChangeSettings;
 
-public class TicketsPerformanceTest extends BaseTest {
+public class TicketsPerformanceTest extends BaseAgentTest {
 
     ChangeSettings changeSettings = new ChangeSettings();
 

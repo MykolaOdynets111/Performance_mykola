@@ -8,7 +8,7 @@ import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
 
-public class DepartmentsPerformanceTest extends BaseTest {
+public class DepartmentsPerformanceTest extends BaseAgentTest {
     Assertion assertions = new Assertion();
 
 

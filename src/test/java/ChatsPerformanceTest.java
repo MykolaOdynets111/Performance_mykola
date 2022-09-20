@@ -1,7 +1,6 @@
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.WaitUntilState;
 import io.qameta.allure.Description;
-import org.aspectj.lang.annotation.Before;
 import org.testng.annotations.*;
 import pages.AgentDeskPage;
 import pages.LoginPage;
@@ -10,7 +9,7 @@ import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
 
-public class ChatsPerformanceTest extends BaseTest {
+public class ChatsPerformanceTest extends BaseAgentTest {
 
     @BeforeMethod
     public void setTestNameInExcel() {
@@ -53,7 +52,7 @@ public class ChatsPerformanceTest extends BaseTest {
     }
 
     @Description("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
-    @Test(enabled = false)
+    @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void closeChatTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
         AgentDeskPage agentDeskPage = openNewAgentPage(tenant, agent, urlPortal);
@@ -81,7 +80,7 @@ public class ChatsPerformanceTest extends BaseTest {
     }
 
     @Description("Assert the time of moving chat to 'Pending' tab")
-    @Test(enabled = false)
+    @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void moveChatToPendingTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
         SoftAssertions assertions = new SoftAssertions();

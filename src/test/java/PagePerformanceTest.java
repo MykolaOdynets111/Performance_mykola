@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
-public class PagePerformanceTest extends BaseTest {
+public class PagePerformanceTest extends BaseAgentTest {
 
 
     @Description("Test Dashboard and Agent pages uploading time")

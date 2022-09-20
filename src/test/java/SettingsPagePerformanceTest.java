@@ -1,9 +1,5 @@
-import io.qameta.allure.Attachment;
 import io.qameta.allure.Description;
 
-
-import junit.framework.TestListener;
-import org.assertj.core.api.SoftAssertions;
 
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -12,7 +8,7 @@ import pages.setingsTabs.*;
 import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
-public class SettingsPagePerformanceTest extends BaseTest {
+public class SettingsPagePerformanceTest extends BaseAgentTest {
     @Description("Assert the time of open tabs in Settings page")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
