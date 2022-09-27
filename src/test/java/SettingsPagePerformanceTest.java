@@ -1,11 +1,10 @@
-import io.qameta.allure.Description;
 
 
+import jdk.jfr.Description;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import pages.SettingsPage;
 import pages.setingsTabs.*;
-import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
 public class SettingsPagePerformanceTest extends BaseAgentTest {
@@ -56,12 +55,8 @@ public class SettingsPagePerformanceTest extends BaseAgentTest {
         }
         long currentTimeAfterOpening = System.currentTimeMillis();
         long tabsOpenTime = currentTimeAfterOpening - currentTimeBeforeOpening;
-        saveScreenshot(settingsPage.getPage().screenshot());
-        AllureLogger.logToAllure(tab + " table open time = " + tabsOpenTime + " milliseconds");
         ApachePOIExcelWrite.testresultdata.put(tab + " table open time, milliseconds ", tabsOpenTime );
         logger.info(tab + " table open time = " + tabsOpenTime + " milliseconds");
-
-//        saveTextLog(tab + " open time = " + tabsOpenTime + " milliseconds");
         assertions.assertThat(tabsOpenTime / 1000l)
                 .as(tab + " open time is longer than 20 seconds")
                 .isLessThan(20);

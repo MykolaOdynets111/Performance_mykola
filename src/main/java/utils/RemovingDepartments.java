@@ -28,15 +28,12 @@ public class RemovingDepartments extends BaseApiRequests {
                 logger.info("Closing " + (i++) + " of " + idsQuantity + " departments");
                 Response response = closeDepartment(jwt, departmentsId, urlPlatform);
                 if (response.getStatusCode() != 200) {
-                    AllureLogger.logToAllure(response.getBody().asString());
                     logger.info(response.getBody().asString());
                     jwt = getJWT(authURL);
                     closeDepartment(jwt, departmentsId, urlPlatform);
                 }
             }
-
         } while (idsQuantity > 0);
-
     }
 
     public static Response closeDepartment(String jwt, String departmentId, String urlPlatform) {

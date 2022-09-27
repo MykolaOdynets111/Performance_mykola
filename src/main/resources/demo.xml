@@ -17,10 +17,15 @@
     <parameter name="tenant" value="PerformanceTestMykolaAQA"/>
     <parameter name="agent" value="SUPERVISOR"/>
     <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
-    <parameter name="loopCount" value="1"/>
-    <parameter name="noOfChats" value="8"/>
-    <parameter name="noOfMessages" value="10"/>
+
+    <parameter name="noOfChats" value="20"/>
+    <parameter name="noOfMessages" value="20"/>
+    <parameter name="departmentAgents" value="1"/>
+
+
     <parameter name="setRampupNo" value="0"/>
+    <parameter name="loopCount" value="1"/>
+
 
     <parameter name="orcaWAId" value="0182443305c68929d6e2374ebee9c910"/>
 
@@ -32,19 +37,16 @@
     <parameter name="messagesCreationJsonData" value="src/main/resources/messagesCreationJsonData.txt"/>
 
 
-
-
-    <parameter name="departmentAgents" value="1"/>
-
-
     <test name="Chatdesk demo">
 
         <classes>
-<!--            <class name="ChatsPerformanceTest"/>-->
             <class name="PagePerformanceTest"/>
-<!--            <class name="SettingsPagePerformanceTest"/>-->
-<!--            <class name="DepartmentsPerformanceTest"/>-->
+            <class name="ChatsPerformanceTest"/>
+            <class name="SettingsPagePerformanceTest"/>
+            <class name="DepartmentsPerformanceTest"/>
+            <class name="MessagesPerformanceTest"/>
 <!--            <class name="TicketsPerformanceTest"/>-->
+
 
         </classes>
     </test>

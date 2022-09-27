@@ -1,8 +1,6 @@
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitUntilState;
-import io.qameta.allure.Attachment;
-import io.qameta.allure.Step;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.control.LoopController;
@@ -15,8 +13,6 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.apache.jmeter.reporters.ResultCollector;
-import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -38,8 +34,7 @@ import utils.RemovingDepartments;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 
 public abstract class BaseTest {
     protected static Browser browser;
@@ -62,7 +57,6 @@ public abstract class BaseTest {
 
     @BeforeMethod
     @Parameters({"urlPlatform"})
-    @Step("Setup")
     public void setup(String urlPlatform) throws Exception {
         logger.setLevel(Level.INFO);
         //Load the application using jmeter:
@@ -182,13 +176,6 @@ public abstract class BaseTest {
         HashTree httpSamplerTree = testPlanTree.add(testPlan, threadGroup);
         httpSamplerTree.add(httpSampler, headerManager);
 
-        //Added summarizer for logging meta info
-        Summariser summariser = new Summariser("summaryOfResults");
-        //Collect results
-        ResultCollector resultCollector = new ResultCollector(summariser);
-        resultCollector.setFilename("src/main/resources/Results.jtl");
-        // add result collector to test plan
-        testPlanTree.add(testPlanTree.getArray()[0], resultCollector);
         //Save this tes plan as a .jmx for future reference
         SaveService.saveTree(testPlanTree, new FileOutputStream("src/main/resources/jmxFile.jmx"));
 
@@ -207,10 +194,7 @@ public abstract class BaseTest {
 
 
 
-    @Attachment(value = "Page screenshot", type = "image/png")
-    protected byte[] saveScreenshot(byte[] screenShot) {
-        return screenShot;
-    }
+
 
     protected Page createNewPage() {
         Playwright playwright1 = Playwright.create();

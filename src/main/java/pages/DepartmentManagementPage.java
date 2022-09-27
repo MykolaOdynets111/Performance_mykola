@@ -4,8 +4,6 @@ import com.github.javafaker.Faker;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
-import io.qameta.allure.Step;
-
 
 public class DepartmentManagementPage extends BasePage {
 
@@ -23,7 +21,6 @@ public class DepartmentManagementPage extends BasePage {
         this.submitDepartmentCreationBtn = page.locator("//button[@type='submit']");
     }
 
-    @Step("Filling data for creation department with {0} agents")
     public void fillInDataInDepartmentCreationTab(int agents) {
         createNewDepartmentBtn.click();
         Faker faker = new Faker();

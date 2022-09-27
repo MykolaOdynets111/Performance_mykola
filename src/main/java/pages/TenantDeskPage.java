@@ -19,6 +19,7 @@ public abstract class TenantDeskPage extends BasePage {
     private final Locator demoLink;
     private final Locator unavailableCheckbox;
     private final Locator chatItem;
+    private final Locator messageItem;
 
 
     protected TenantDeskPage(Page page) {
@@ -35,6 +36,7 @@ public abstract class TenantDeskPage extends BasePage {
         this.demoLink = page.locator(".cl-profile-info__agent-name");
         this.unavailableCheckbox = page.locator("text=Unavailable");
         this.chatItem = page.locator(".cl-chat-item");
+        this.messageItem = page.locator("//div[@data-testid='chat-message']");
 
     }
 
@@ -95,7 +97,6 @@ public abstract class TenantDeskPage extends BasePage {
 
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);
             page.waitForLoadState(LoadState.LOAD);
-//            page.waitForLoadState(LoadState.NETWORKIDLE);
             Thread.sleep(1000);
             i++;
 
@@ -120,7 +121,6 @@ public abstract class TenantDeskPage extends BasePage {
             if (chatItem.nth(i).getAttribute(DATA_TEST_ID).equals(dataTestId)) {
                 return true;
             }
-
         }
         return false;
     }
@@ -133,4 +133,21 @@ public abstract class TenantDeskPage extends BasePage {
         while (chatItem.nth(0).getAttribute("data-testid").equals(issuedDataTestId));
     }
 
+    public int scrollToFirstMessage(Page page) throws InterruptedException {
+        String firstID;
+        int i = 0;
+        do {
+            Locator first = messageItem.nth(messageItem.count() - 1);
+            firstID = first.getAttribute("id");
+            first.scrollIntoViewIfNeeded();
+
+            page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+            page.waitForLoadState(LoadState.LOAD);
+            Thread.sleep(1000);
+            i++;
+        }
+        while (!firstID.equals(messageItem.nth(messageItem.count() - 1).getAttribute("id")));
+        return i;
+
+    }
 }

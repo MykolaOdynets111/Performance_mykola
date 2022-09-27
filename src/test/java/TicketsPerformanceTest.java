@@ -1,6 +1,6 @@
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitUntilState;
-import io.qameta.allure.Description;
+import jdk.jfr.Description;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
@@ -44,22 +44,7 @@ public class TicketsPerformanceTest extends BaseAgentTest {
 
 
         supervisorAgentDeskPage.assignTicket(1);
-//
-//
-//
-//
-//        agentDeskPage.acceptTransferChat();
-//        waitWilePageFullyLoaded(supervisorAgentDeskPage.getPage());
-//        long currentTimeAfterTransferring = System.currentTimeMillis();
-//        long transferringTime = currentTimeAfterTransferring - currentTimeBeforeTransferring;
-//        AllureLogger.logToAllure("Transferring time = " + transferringTime + " milliseconds");
-//        saveScreenshot(agentDeskPage.getPage().screenshot());
-//        logger.info("Transferring time = " + transferringTime + " milliseconds");
-//        assertions.assertThat(transferringTime / 1000l)
-//                .as("chat is transferred longer than 20 seconds")
-//                .isLessThan(20);
-//        assertions.assertAll();
-//        agentDeskPage.getPage().close();
+
     }
 
     @AfterTest

@@ -1,21 +1,10 @@
 import org.testng.annotations.*;
-import utils.ApachePOIExcelWrite;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jorphan.collections.HashTree;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class BaseAgentTest extends BaseTest{
-
-
-    @BeforeTest
-    @Parameters({"noOfChats"})
-    public void setupTest(int noOfThreads){
-        ApachePOIExcelWrite.testresultdata.put("chat count ",  noOfThreads);
-        ApachePOIExcelWrite.testresultdata.put("","");
-    }
-
 
     @BeforeMethod
     @Parameters({ "testPlaneName", "loopCount", "noOfChats", "setRampupNo", "urlChannels", "orcaWAId", "ChatsCreationJsonData"})

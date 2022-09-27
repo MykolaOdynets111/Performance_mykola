@@ -1,11 +1,9 @@
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.WaitUntilState;
-import io.qameta.allure.Description;
+import jdk.jfr.Description;
 import org.testng.annotations.*;
 import pages.AgentDeskPage;
 import pages.LoginPage;
-import org.assertj.core.api.SoftAssertions;
-import utils.AllureLogger;
 import utils.ApachePOIExcelWrite;
 
 
@@ -14,7 +12,6 @@ public class ChatsPerformanceTest extends BaseAgentTest {
     @BeforeMethod
     public void setTestNameInExcel() {
         ApachePOIExcelWrite.testresultdata.put("Chats performance  time test ", "");
-        ApachePOIExcelWrite.testresultdata.put("------------------", "");
     }
 
     @Description("Assert that time of chat transferring is less than 20 seconds")
@@ -31,8 +28,6 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         waitWilePageFullyLoaded(agentLoginPage.getPage());
         AgentDeskPage agentDeskPage = dashboardPage.launchAgentDesk(agentPage, urlPortal);
         waitWilePageFullyLoaded(agentDeskPage.getPage());
-//        Thread.sleep(1000);
-
         supervisorAgentDeskPage.checkChatForTransferring(1, 0);
         long currentTimeBeforeTransferring = System.currentTimeMillis();
         supervisorAgentDeskPage.confirmTransfer();
@@ -40,9 +35,7 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         waitWilePageFullyLoaded(supervisorAgentDeskPage.getPage());
         long currentTimeAfterTransferring = System.currentTimeMillis();
         long transferringTime = currentTimeAfterTransferring - currentTimeBeforeTransferring;
-        AllureLogger.logToAllure("Transferring time = " + transferringTime + " milliseconds");
         ApachePOIExcelWrite.testresultdata.put("Transferring time, milliseconds ", transferringTime);
-        saveScreenshot(agentDeskPage.getPage().screenshot());
         logger.info("Transferring time = " + transferringTime + " milliseconds");
         assertions.assertThat(transferringTime / 1000l)
                 .as("chat is transferred longer than 20 seconds")
@@ -68,10 +61,11 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         agentDeskPage.clickChatItem(0);
         long currentTimeAfterClosing = System.currentTimeMillis();
+        assertions.assertThat(agentDeskPage.getDataTestId(0))
+                .as("chat was not appeared in the 'Closed' tab ")
+                .isEqualTo(issuedDataTestId);
         long transferringTime = currentTimeAfterClosing - currentTimeBeforeClosing;
-        AllureLogger.logToAllure("Time of closing chat = " + transferringTime + " milliseconds");
         ApachePOIExcelWrite.testresultdata.put("Time of closing chat, milliseconds ", transferringTime);
-        saveScreenshot(agentDeskPage.getPage().screenshot());
         logger.info("Time of closing chat = " + transferringTime + " milliseconds");
         assertions.assertThat(transferringTime / 1000l)
                 .as("chat was closed longer than 20 seconds")
@@ -83,24 +77,23 @@ public class ChatsPerformanceTest extends BaseAgentTest {
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void moveChatToPendingTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
-        SoftAssertions assertions = new SoftAssertions();
         AgentDeskPage agentDeskPage = openNewAgentPage(tenant, agent, urlPortal);
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         agentDeskPage.clickChatItem(0);
+        String issuedDataTestId = agentDeskPage.getDataTestId(0);
         long currentTimeBeforeMoving = System.currentTimeMillis();
         agentDeskPage.moveChatToPending(0);
+        agentDeskPage.waitWhileChatDisappearFromPage(issuedDataTestId);
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         agentDeskPage.openPendingTab();
         waitWilePageFullyLoaded(agentDeskPage.getPage());
-
         agentDeskPage.clickChatItem(0);
         long currentTimeAfterMoving = System.currentTimeMillis();
-
+        assertions.assertThat(agentDeskPage.getDataTestId(0))
+                .as("chat was not appeared in the 'Pending' tab ")
+                .isEqualTo(issuedDataTestId);
         long transferringTime = currentTimeAfterMoving - currentTimeBeforeMoving;
-
-        AllureLogger.logToAllure("Time of moving chat to pending is = " + transferringTime + " milliseconds");
         ApachePOIExcelWrite.testresultdata.put("Time of moving chat to pending, milliseconds ", transferringTime);
-        saveScreenshot(agentDeskPage.getPage().screenshot());
         logger.info("Time of moving chat to pending is = " + transferringTime + " milliseconds");
         assertions.assertThat(transferringTime / 1000l)
                 .as("chat was moved do pending in time longer than 20 seconds")

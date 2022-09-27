@@ -38,22 +38,17 @@
     <parameter name="messagesCreationJsonData" value="src/main/resources/messagesCreationJsonData.txt"/>
 
 
-
-    <parameter name="departmentAgents" value="1"/>
-
-
     <test name="Chatdesk stage">
 
 
-
         <classes>
-<!--            <class name="PagePerformanceTest"/>-->
-<!--            <class name="ChatsPerformanceTest"/>-->
-<!--            <class name="SettingsPagePerformanceTest"/>-->
-<!--            <class name="DepartmentsPerformanceTest"/>-->
-<!--            <class name="TicketsPerformanceTest"/>-->
+            <class name="PagePerformanceTest"/>
+            <class name="ChatsPerformanceTest"/>
+            <class name="SettingsPagePerformanceTest"/>
+            <class name="DepartmentsPerformanceTest"/>
             <class name="MessagesPerformanceTest"/>
 
+            <!--<class name="TicketsPerformanceTest"/>-->
         </classes>
     </test>
 

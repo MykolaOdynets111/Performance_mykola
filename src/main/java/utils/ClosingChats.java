@@ -19,7 +19,6 @@ public class ClosingChats extends BaseApiRequests {
             List<String> conversationIds = getChats(authURL, urlPlatform);
             idsQuantity = conversationIds.size();
 
-            AllureLogger.logToAllure("New chats quantity: " + conversationIds.size());
             logger.info("New chats quantity: " + conversationIds.size());
 
             int i = 1;
@@ -28,7 +27,6 @@ public class ClosingChats extends BaseApiRequests {
                 logger.info("Closing " + (i++) + " of " + idsQuantity + " chats");
                 Response response = closeChats(jwt, conversationId, urlPlatform);
                 if (response.getStatusCode() != 200) {
-                    AllureLogger.logToAllure(response.getBody().asString());
                     logger.info(response.getBody().asString());
                     jwt = getJWT(authURL);
                     closeChats(jwt, conversationId, urlPlatform);

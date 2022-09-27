@@ -4,12 +4,10 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.SelectOption;
 import com.microsoft.playwright.options.WaitUntilState;
-import io.qameta.allure.Step;
 
 
 public class LoginPage extends BasePage {
 
-    //    private final Page page;
     private final Locator selectTenantDropdown;
     private final Locator selectAgentDropdown;
     private final Locator authenticateButton;
@@ -48,7 +46,6 @@ public class LoginPage extends BasePage {
 
     }
 
-    @Step("Log in as tenant {0}, agent {1}")
     public LoginPage loginTenant(String tenant, String agent) {
         return this.setTenant(tenant)
                 .setAgent(agent)
