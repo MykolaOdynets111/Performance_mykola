@@ -1,31 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="HomeChromeUK2">
+<suite name="chatdesk_stage">
 
-    <parameter name="setBrowser" value="chrome" />
+    <parameter name="setBrowser" value="chrome"/>
     <parameter name="urlPortal"
                value="https://stage-chatdesk-portal-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
     <parameter name="urlPlatform"
-               value="https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com" />
+               value="https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
     <parameter name="urlChannels"
                value="stage-chatdesk-channels-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
-    <parameter name="tenant" value="PerformanceIhor3" />
-    <parameter name="agent" value="SUPERVISOR" />
-    <parameter name="testPlaneName" value="Orca WhatsApp Chat" />
 
-    <parameter name="loopCount" value="1" />
-    <parameter name="noOfThreads" value="10" />
-    <parameter name="setRampupNo" value="0" />
-
-    <parameter name="orcaWAId" value="017e7d405768f1b6ed17992fa574128b" />
+    <parameter name="domain" value="int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com"/>
 
 
-    <test name="HomeChromeUK2">
+    <parameter name="tenant" value="PerformanceIhor3"/>
+    <parameter name="agent" value="SUPERVISOR"/>
+    <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
+
+    <parameter name="noOfChats" value="10"/>
+    <parameter name="noOfMessages" value="10"/>
+    <parameter name="departmentAgents" value="1"/>
+
+
+    <parameter name="setRampupNo" value="0"/>
+    <parameter name="loopCount" value="1"/>
+
+
+    <parameter name="orcaWAId" value="017e7d405768f1b6ed17992fa574128b"/>
+
+
+    <parameter name="tenantId" value="017e7d3f1853d67b3a1486a5308af012"/>
+    <parameter name="agentId" value="017e7d3f1b008521e3492c764ad9d408"/>
+
+
+    <parameter name="ChatsCreationJsonData" value="src/main/resources/ChatsCreationJsonData.txt"/>
+    <parameter name="messagesCreationJsonData" value="src/main/resources/messagesCreationJsonData.txt"/>
+
+
+    <test name="Chatdesk stage">
+
 
         <classes>
-<!--            <class name="PagePerformanceTest" />-->
-            <class name="ChatsPerformanceTest" />
+            <class name="PagePerformanceTest"/>
+            <class name="ChatsPerformanceTest"/>
+            <class name="SettingsPagePerformanceTest"/>
+            <class name="DepartmentsPerformanceTest"/>
+            <class name="MessagesPerformanceTest"/>
+
+            <!--<class name="TicketsPerformanceTest"/>-->
         </classes>
     </test>
 

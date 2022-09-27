@@ -1,0 +1,2 @@
+
+{"eventId":"Performance%1$s","providerId":"touch","routeId":"%2$s","sourceId":"%1$s","sessionId":"%1$s","content":{"extraFields":{"channelProfileName":"AQA%1$s"},"event":{"text":"${__Random(100000,10000000)}","eventType":"TEXT"}},"externalReferenceId":"AQA%1$s"}
