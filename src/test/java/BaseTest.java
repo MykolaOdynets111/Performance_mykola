@@ -44,7 +44,7 @@ public abstract class BaseTest {
     protected BrowserContext context;
     protected Playwright playwright;
     protected static Logger logger = Logger.getLogger(BaseTest.class);
-    protected SoftAssertions assertions = new SoftAssertions();
+    protected SoftAssertions assertions;
     protected StandardJMeterEngine jMeterEngine;
 
     @BeforeTest
@@ -65,6 +65,7 @@ public abstract class BaseTest {
         JMeterUtils.setJMeterHome("/Users/modynets/Documents/Roku/apache-jmeter-5.4.3");
         JMeterUtils.initLocale();
         SaveService.loadProperties();
+        assertions = new SoftAssertions();
 
 
         //running jmeter tests from /jmx file:
@@ -224,9 +225,9 @@ public abstract class BaseTest {
     @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
     public void clearTestData(String tenantId, String agentId, String urlPlatform, String domain) {
         ClosingChats closingChats = new ClosingChats();
-        closingChats.main(tenantId, agentId, urlPlatform, domain);
-        RemovingDepartments removingDepartments = new RemovingDepartments();
-        removingDepartments.main(tenantId, agentId, urlPlatform, domain);
+//        closingChats.main(tenantId, agentId, urlPlatform, domain);
+//        RemovingDepartments removingDepartments = new RemovingDepartments();
+//        removingDepartments.main(tenantId, agentId, urlPlatform, domain);
         browser.close();
     }
 

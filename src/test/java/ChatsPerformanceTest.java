@@ -15,7 +15,7 @@ public class ChatsPerformanceTest extends BaseAgentTest {
     }
 
     @Description("Assert that time of chat transferring is less than 20 seconds")
-    @Test(enabled = true)
+    @Test(enabled = false)
     @Parameters({"tenant", "agent", "urlPortal", "urlPlatform"})
     public void transferChatTimeTest(String tenant, String agent, String urlPortal, String urlPlatform) throws InterruptedException {
 
@@ -29,8 +29,10 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         AgentDeskPage agentDeskPage = dashboardPage.launchAgentDesk(agentPage, urlPortal);
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         supervisorAgentDeskPage.checkChatForTransferring(1, 0);
+        String issuedDataTestId = supervisorAgentDeskPage.getDataTestId(0);
         long currentTimeBeforeTransferring = System.currentTimeMillis();
         supervisorAgentDeskPage.confirmTransfer();
+        supervisorAgentDeskPage.waitWhileChatDisappearFromPage(issuedDataTestId);
         agentDeskPage.acceptTransferChat();
         waitWilePageFullyLoaded(supervisorAgentDeskPage.getPage());
         long currentTimeAfterTransferring = System.currentTimeMillis();
@@ -42,10 +44,11 @@ public class ChatsPerformanceTest extends BaseAgentTest {
                 .isLessThan(20);
         assertions.assertAll();
         agentDeskPage.getPage().close();
+        agentPage.close();
     }
 
     @Description("Assert the time of closing the live chat and appearing it in the 'Closed' tab")
-    @Test(enabled = true)
+    @Test(enabled = false)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void closeChatTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
         AgentDeskPage agentDeskPage = openNewAgentPage(tenant, agent, urlPortal);
@@ -61,9 +64,9 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         agentDeskPage.clickChatItem(0);
         long currentTimeAfterClosing = System.currentTimeMillis();
-        assertions.assertThat(agentDeskPage.getDataTestId(0))
+        assertions.assertThat(agentDeskPage.isChatPresentOnPage(issuedDataTestId))
                 .as("chat was not appeared in the 'Closed' tab ")
-                .isEqualTo(issuedDataTestId);
+                .isTrue();
         long transferringTime = currentTimeAfterClosing - currentTimeBeforeClosing;
         ApachePOIExcelWrite.testresultdata.put("Time of closing chat, milliseconds ", transferringTime);
         logger.info("Time of closing chat = " + transferringTime + " milliseconds");
@@ -74,7 +77,7 @@ public class ChatsPerformanceTest extends BaseAgentTest {
     }
 
     @Description("Assert the time of moving chat to 'Pending' tab")
-    @Test(enabled = true)
+    @Test(enabled = false)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void moveChatToPendingTimeTest(String tenant, String agent, String urlPortal) throws InterruptedException {
         AgentDeskPage agentDeskPage = openNewAgentPage(tenant, agent, urlPortal);
@@ -101,5 +104,33 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         assertions.assertAll();
     }
 
+    @Description("Assert the time of adding attachment to chat")
+    @Test(enabled = true)
+    @Parameters({"tenant", "agent", "urlPortal"})
+    public void addAttachmentToChatTimeTest(String tenant, String agent, String urlPortal) {
+        AgentDeskPage agentDeskPage = openNewAgentPage(tenant, agent, urlPortal);
+        waitWilePageFullyLoaded(agentDeskPage.getPage());
+        agentDeskPage.clickChatItem(0);
+        long currentTimeBeforeAdding = System.currentTimeMillis();
+        agentDeskPage.uploadExampleAttachment(agentDeskPage.getPage());
+        long currentTimeAfterAdding = System.currentTimeMillis();
+        long uploadingTime = currentTimeAfterAdding - currentTimeBeforeAdding;
+        ApachePOIExcelWrite.testresultdata.put("Time of uploading attachment, milliseconds ", uploadingTime);
+        logger.info("Time of uploading attachment is = " + uploadingTime + " milliseconds");
+        agentDeskPage.clickChatItem(0);
+        long currentTimeBeforeSendLocation = System.currentTimeMillis();
+        agentDeskPage.sendLocation(agentDeskPage.getPage(), "Ukraine");
+        long currentTimeAfterSendLocation = System.currentTimeMillis();
+        long sendLocationTime = currentTimeAfterSendLocation - currentTimeBeforeSendLocation;
+        ApachePOIExcelWrite.testresultdata.put("Time of sending location, milliseconds ", sendLocationTime);
+        logger.info("Time of sending location is = " + sendLocationTime + " milliseconds");
+        assertions.assertThat(uploadingTime / 1000l)
+                .as("Time of uploading attachment, longer than 20 seconds")
+                .isLessThan(20);
+        assertions.assertThat(sendLocationTime / 1000l)
+                .as("Time of sending location, longer than 20 seconds")
+                .isLessThan(20);
+        assertions.assertAll();
+    }
 
 }

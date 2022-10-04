@@ -16,16 +16,14 @@ public class TicketsPerformanceTest extends BaseAgentTest {
 
     @BeforeTest
     @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
-    public void uncheckAllSupportHours (String tenantId, String agentId, String urlPlatform, String domain){
+    public void uncheckAllSupportHours(String tenantId, String agentId, String urlPlatform, String domain) {
         changeSettings.uncheckSupportHours(tenantId, agentId, urlPlatform, domain);
     }
-
 
     @Description("Assert that time assigning the ticket to agent is less than 20 seconds")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal", "urlPlatform", "domain"})
-    public void assignTicketTimeTest(String tenant, String agent, String urlPortal, String urlPlatform, String domain) throws InterruptedException {
-
+    public void assignTicketTimeTest(String tenant, String agent, String urlPortal, String urlPlatform, String domain) {
 
         dashboardPage = openDashboardPage(tenant, agent, urlPortal);
         SupervisorDeskPage supervisorAgentDeskPage = dashboardPage.launchSupervisorDesk(dashboardPage.getPage(), urlPortal);
@@ -38,18 +36,13 @@ public class TicketsPerformanceTest extends BaseAgentTest {
         AgentDeskPage agentDeskPage = dashboardPage.launchAgentDesk(agentPage, urlPortal);
         waitWilePageFullyLoaded(agentDeskPage.getPage());
         long currentTimeBeforeTransferring = System.currentTimeMillis();
-
-
         supervisorAgentDeskPage.openTicketsTab();
-
-
         supervisorAgentDeskPage.assignTicket(1);
-
     }
 
     @AfterTest
     @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
-    public void resetAllSupportHours (String tenantId, String agentId, String urlPlatform, String domain){
+    public void resetAllSupportHours(String tenantId, String agentId, String urlPlatform, String domain) {
         changeSettings.resetSupportHours(tenantId, agentId, urlPlatform, domain);
     }
 

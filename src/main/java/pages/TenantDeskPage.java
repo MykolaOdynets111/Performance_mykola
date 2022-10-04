@@ -4,9 +4,12 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 
+import java.nio.file.Path;
+
 public abstract class TenantDeskPage extends BasePage {
 
     private static final String DATA_TEST_ID = "data-testId";
+    private final String attachmentInputSelector;
     private final Locator closedChatsTab;
     private final Locator ticketsTab;
     private final Locator pendingTab;
@@ -20,6 +23,16 @@ public abstract class TenantDeskPage extends BasePage {
     private final Locator unavailableCheckbox;
     private final Locator chatItem;
     private final Locator messageItem;
+    private final Locator addAttachmentIcon;
+    private final Locator sendFileBtn;
+    private final Locator messageWithAttachment;
+    private final Locator addLocationBtn;
+    private final Locator locationInput;
+    private final Locator sendLocationBtn;
+    private final Locator messageWithLocation;
+
+
+
 
 
     protected TenantDeskPage(Page page) {
@@ -37,6 +50,14 @@ public abstract class TenantDeskPage extends BasePage {
         this.unavailableCheckbox = page.locator("text=Unavailable");
         this.chatItem = page.locator(".cl-chat-item");
         this.messageItem = page.locator("//div[@data-testid='chat-message']");
+        this.addAttachmentIcon = page.locator("[name='attachment']");
+        this.attachmentInputSelector = ".cl-drag-zone>:first-child";
+        this.sendFileBtn = page.locator("//button[contains(text(),'Send file')]");
+        this.messageWithAttachment = page.locator(".media-message__preview");
+        this.addLocationBtn = page.locator("[id='Map Pin']");
+        this.locationInput = page.locator("[placeholder='Search location']");
+        this.sendLocationBtn = page.locator("//button[contains(text(),'Send location')]");
+        this.messageWithLocation = page.locator(".media-message__preview");
 
     }
 
@@ -150,4 +171,23 @@ public abstract class TenantDeskPage extends BasePage {
         return i;
 
     }
+    public void uploadExampleAttachment(Page page){
+        addAttachmentIcon.click();
+        page.setInputFiles(attachmentInputSelector, Path.of("src/main/resources/example_attachment.png"));
+        sendFileBtn.click();
+        messageWithAttachment.waitFor();
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        page.waitForLoadState(LoadState.LOAD);
+    }
+
+    public void sendLocation(Page page, String location){
+        addLocationBtn.click();
+        page.keyboard().insertText(location);;
+        locationInput.press("Enter");
+        sendLocationBtn.click();
+        messageWithLocation.waitFor();
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        page.waitForLoadState(LoadState.LOAD);
+    }
+
 }

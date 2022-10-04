@@ -36,12 +36,6 @@ public class SupervisorDeskPage extends TenantDeskPage {
     public void assignTicket(int ticketNum){
         ticketCheckboxes.nth(ticketNum).check();
 
-
-
-
-
-
-
         System.out.println();
     }
 
