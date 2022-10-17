@@ -15,7 +15,7 @@ public abstract class BaseAgentTest extends BaseTest{
         HTTPSamplerProxy httpSampler = setHttpSampler(orcaWAId, urlChannels, "orca/message",  postBody, setHeader());
         HashTree testPlanTree = configureTestPlan(testPlanName, noOfThreads, setRampupNo, loopCount,  httpSampler);
         jMeterEngine.configure(testPlanTree);
-        jMeterEngine.run();
+        jMeterEngine.runTest();
         logger.info("Jmeter engine run");
         while (jMeterEngine.isActive()) {
             Thread.sleep(1000);

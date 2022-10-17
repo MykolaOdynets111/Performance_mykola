@@ -18,7 +18,7 @@
     <parameter name="agent" value="SUPERVISOR"/>
     <parameter name="testPlaneName" value="Orca WhatsApp Chat"/>
 
-    <parameter name="noOfChats" value="20"/>
+    <parameter name="noOfChats" value="5"/>
     <parameter name="noOfMessages" value="20"/>
     <parameter name="departmentAgents" value="1"/>
 
@@ -31,7 +31,7 @@
 
 
     <parameter name="tenantId" value="01824432fb2bd1342e2184ca81095870"/>
-    <parameter name="agentId" value="01824433002ef4ba120a905b05ce2d69"/>
+    <parameter name="agentId" value="01824432fe130d3f15a1418ddae6ed05"/>
 
     <parameter name="ChatsCreationJsonData" value="src/main/resources/ChatsCreationJsonData.txt"/>
     <parameter name="messagesCreationJsonData" value="src/main/resources/messagesCreationJsonData.txt"/>

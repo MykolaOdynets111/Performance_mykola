@@ -1,5 +1,6 @@
 package pages;
 
+import com.microsoft.playwright.Keyboard;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
@@ -57,7 +58,7 @@ public abstract class TenantDeskPage extends BasePage {
         this.addLocationBtn = page.locator("[id='Map Pin']");
         this.locationInput = page.locator("[placeholder='Search location']");
         this.sendLocationBtn = page.locator("//button[contains(text(),'Send location')]");
-        this.messageWithLocation = page.locator(".media-message__preview");
+        this.messageWithLocation = page.locator(".cl-location-message__data");
 
     }
 
@@ -118,7 +119,9 @@ public abstract class TenantDeskPage extends BasePage {
 
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);
             page.waitForLoadState(LoadState.LOAD);
-            Thread.sleep(1000);
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            Thread.sleep(2000);
             i++;
 
         }
@@ -146,12 +149,15 @@ public abstract class TenantDeskPage extends BasePage {
         return false;
     }
 
-    public void waitWhileChatDisappearFromPage(String issuedDataTestId) throws InterruptedException {
+    public int waitWhileChatDisappearFromPage(String issuedDataTestId) throws InterruptedException {
+        int i= 0;
         chatItem.nth(0).waitFor();
         do {
             Thread.sleep(1000);
+            i++;
         }
         while (chatItem.nth(0).getAttribute("data-testid").equals(issuedDataTestId));
+        return i;
     }
 
     public int scrollToFirstMessage(Page page) throws InterruptedException {
@@ -180,14 +186,16 @@ public abstract class TenantDeskPage extends BasePage {
         page.waitForLoadState(LoadState.LOAD);
     }
 
-    public void sendLocation(Page page, String location){
+    public int sendLocation(Page page, String location){
         addLocationBtn.click();
-        page.keyboard().insertText(location);;
-        locationInput.press("Enter");
+        int delay = location.length()*100;
+        page.keyboard().type(location, new Keyboard.TypeOptions().setDelay(100));
+        page.keyboard().press("Enter");
         sendLocationBtn.click();
         messageWithLocation.waitFor();
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.LOAD);
+        return delay;
     }
 
 }

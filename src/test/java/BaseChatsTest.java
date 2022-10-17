@@ -16,7 +16,7 @@ public abstract class BaseChatsTest extends BaseTest {
         HTTPSamplerProxy httpSampler = setHttpSampler(orcaWAId, urlChannels, "orca/message", prepareMessagePostBody(postBodyPath, orcaWAId), setHeader());
         HashTree testPlanTree = configureTestPlan(testPlanName, noOfThreads, setRampupNo, loopCount, httpSampler);
         jMeterEngine.configure(testPlanTree);
-        jMeterEngine.run();
+        jMeterEngine.runTest();
         logger.info("Jmeter engine run");
         while (jMeterEngine.isActive()) {
             Thread.sleep(1000);
@@ -29,9 +29,10 @@ public abstract class BaseChatsTest extends BaseTest {
     private String prepareMessagePostBody(String postBodyPath, String orcaWAId) throws IOException {
         Path fileName = Path.of(postBodyPath);
         int chatName = new Random().nextInt();
-        return String.format(Files.readString(fileName), chatName, orcaWAId);
+        String body = String.format(Files.readString(fileName), chatName, orcaWAId);
+        System.out.println();
+        return body;
     }
-
 
 }
 

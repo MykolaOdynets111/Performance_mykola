@@ -7,13 +7,12 @@ import pages.SettingsPage;
 import pages.setingsTabs.*;
 import utils.ApachePOIExcelWrite;
 
-public class SettingsPagePerformanceTest extends BaseAgentTest {
+public class SettingsPagePerformanceTest extends BaseTest{
     @Description("Assert the time of open tabs in Settings page")
     @Test(enabled = true)
     @Parameters({"tenant", "agent", "urlPortal"})
     public void openSettingsTabsTest(String tenant, String agent, String urlPortal) {
         ApachePOIExcelWrite.testresultdata.put("Settings page tabs time opening time  ", "" );
-        ApachePOIExcelWrite.testresultdata.put("------------------", "");
 
         loginPage.loginTenant(tenant, agent);
         waitWilePageFullyLoaded(loginPage.getPage());

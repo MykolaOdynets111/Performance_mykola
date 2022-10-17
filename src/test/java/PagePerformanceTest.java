@@ -48,7 +48,7 @@ public class PagePerformanceTest extends BaseAgentTest {
         waitWilePageFullyLoaded(supervisorDeskPage.getPage());
         long timeAfterScrollingSupervisor = System.currentTimeMillis();
         long timeOfScrollingSupervisorPage = timeAfterScrollingSupervisor - timeBeforeScrollingSupervisor -
-                (countScrollingIterations* 1000L);
+                (countScrollingIterations* 2000L);
         ApachePOIExcelWrite.testresultdata.put("Time of scrolling to the end of the page is ", timeOfScrollingSupervisorPage);
         logger.info("Time of scrolling to the end of the page is " + timeOfScrollingSupervisorPage + " milliseconds");
         long averageOfScrolling = timeOfScrollingSupervisorPage / countScrollingIterations;

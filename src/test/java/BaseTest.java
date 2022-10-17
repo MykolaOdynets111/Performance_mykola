@@ -51,7 +51,7 @@ public abstract class BaseTest {
     @Parameters({"noOfChats"})
     public void setupTest(int noOfThreads){
         ApachePOIExcelWrite.testresultdata.put("chat count ",  noOfThreads);
-        ApachePOIExcelWrite.testresultdata.put("","");
+        ApachePOIExcelWrite.testresultdata.put("------------------", "");
     }
 
 
@@ -225,9 +225,9 @@ public abstract class BaseTest {
     @Parameters({"tenantId", "agentId", "urlPlatform", "domain"})
     public void clearTestData(String tenantId, String agentId, String urlPlatform, String domain) {
         ClosingChats closingChats = new ClosingChats();
-//        closingChats.main(tenantId, agentId, urlPlatform, domain);
-//        RemovingDepartments removingDepartments = new RemovingDepartments();
-//        removingDepartments.main(tenantId, agentId, urlPlatform, domain);
+        closingChats.main(tenantId, agentId, urlPlatform, domain);
+        RemovingDepartments removingDepartments = new RemovingDepartments();
+        removingDepartments.main(tenantId, agentId, urlPlatform, domain);
         browser.close();
     }
 
