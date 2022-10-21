@@ -33,18 +33,24 @@ public class ChatsPerformanceTest extends BaseAgentTest {
         long currentTimeBeforeTransferring = System.currentTimeMillis();
         supervisorAgentDeskPage.confirmTransfer();
 //        supervisorAgentDeskPage.waitWhileChatDisappearFromPage(issuedDataTestId);
-        agentDeskPage.acceptTransferChat();
-        waitWilePageFullyLoaded(supervisorAgentDeskPage.getPage());
-        long currentTimeAfterTransferring = System.currentTimeMillis();
-        long transferringTime = currentTimeAfterTransferring - currentTimeBeforeTransferring;
-        ApachePOIExcelWrite.testresultdata.put("Transferring time, milliseconds ", transferringTime);
-        logger.info("Transferring time = " + transferringTime + " milliseconds");
-        assertions.assertThat(transferringTime / 1000l)
-                .as("chat is transferred longer than 20 seconds")
-                .isLessThan(20);
+        try {
+            agentDeskPage.acceptTransferChat();
+            waitWilePageFullyLoaded(supervisorAgentDeskPage.getPage());
+            long currentTimeAfterTransferring = System.currentTimeMillis();
+            long transferringTime = currentTimeAfterTransferring - currentTimeBeforeTransferring;
+            ApachePOIExcelWrite.testresultdata.put("Transferring time, milliseconds ", transferringTime);
+            logger.info("Transferring time = " + transferringTime + " milliseconds");
+            assertions.assertThat(transferringTime / 1000l)
+                    .as("chat is transferred longer than 20 seconds")
+                    .isLessThan(20);
+        } catch (PlaywrightException exception) {
+            logger.info("Can't accept transferring");
+            assertions.fail("Can't accept transferring");
+        } finally {
+            agentDeskPage.getPage().close();
+            agentPage.close();
+        }
         assertions.assertAll();
-        agentDeskPage.getPage().close();
-        agentPage.close();
     }
 
     @Description("Assert the time of closing the live chat and appearing it in the 'Closed' tab")

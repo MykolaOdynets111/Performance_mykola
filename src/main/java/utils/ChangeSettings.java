@@ -5,7 +5,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.testng.annotations.Parameters;
 
 public class ChangeSettings extends BaseApiRequests {
     private static Logger logger = Logger.getLogger(ChangeSettings.class);
